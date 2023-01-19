@@ -1,0 +1,88 @@
+import Player from "./Player.js";
+import InputHandler from "./InputHandler.js";
+import UI from "./UI.js";
+import Angler1 from "./Enemy.js";
+import { chechCollision } from "./colisions.js";
+
+export default class Game {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+    this.palyer = new Player(this);
+    this.inputHandler = new InputHandler(this);
+    this.ui = new UI(this);
+    this.keys = [];
+    this.enemies = [];
+    this.enemyTimer = 0;
+    this.enemyInterval = 1000; // interval for adding new enemy
+    this.ammo = 20; // start ammo
+    this.maxAmmo = 50; // well, max ammo
+    this.ammoTimer = 0;
+    this.ammoInterval = 500; // we use it to recharge ammo every 500 mls.
+    this.gameOver = false;
+    this.score = 0;
+    this.winnigScore = 50;
+    this.gameTime = 0;
+    this.timeLimit = 5000; // game gose for 5 seconds for testing porposes
+  }
+
+  update(deltaTime) {
+    if (!this.gameOver) {
+      this.gameTime += deltaTime;
+    }
+    if (this.gameTime > this.timeLimit) {
+      this.gameOver = true;
+    }
+    this.palyer.update();
+    if (this.ammoTimer > this.ammoInterval) {
+      if (this.ammo < this.maxAmmo) {
+        this.ammo++;
+        this.ammoTimer = 0;
+      }
+    } else {
+      this.ammoTimer += deltaTime;
+    }
+
+    for (let enemy of this.enemies) {
+      enemy.update();
+      if (chechCollision(this.palyer, enemy)) {
+        enemy.markedForDelition = true;
+      }
+      for (let proj of this.palyer.prejectiles) {
+        if (chechCollision(proj, enemy)) {
+          enemy.lives--;
+          proj.markedForDelition = true;
+          if (enemy.lives <= 0) {
+            enemy.markedForDelition = true;
+            if (!this.gameOver) {
+              this.score += enemy.score;
+            }
+            if (this.score > this.winnigScore) {
+              this.gameOver = true;
+            }
+          }
+        }
+      }
+    }
+    this.enemies = this.enemies.filter((enemy) => !enemy.markedForDelition);
+    this.palyer.prejectiles = this.palyer.prejectiles.filter(
+      (p) => !p.markedForDelition
+    );
+    if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
+      this.addEnemy();
+      this.enemyTimer = 0;
+    } else {
+      this.enemyTimer += deltaTime;
+    }
+  }
+
+  draw(context) {
+    this.palyer.draw(context);
+    this.ui.draw(context);
+    this.enemies.forEach((enemy) => enemy.draw(context));
+  }
+
+  addEnemy() {
+    this.enemies.push(new Angler1(this));
+  }
+}

@@ -27,7 +27,7 @@ export default class UI {
     context.fillText(
       `Timer ${formatedTme}`,
       this.game.width * 0.9,
-      this.game.height * 0.2 - 40
+      this.game.height * 0.15 - 40
     );
 
     if (this.game.gameOver) {

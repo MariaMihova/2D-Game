@@ -3,11 +3,13 @@ import InputHandler from "./InputHandler.js";
 import UI from "./UI.js";
 import Angler1 from "./Enemy.js";
 import { chechCollision } from "./colisions.js";
+import { Background } from "./Background.js";
 
 export default class Game {
   constructor(width, height) {
     this.width = width;
     this.height = height;
+    this.background = new Background(this);
     this.palyer = new Player(this);
     this.inputHandler = new InputHandler(this);
     this.ui = new UI(this);
@@ -24,6 +26,7 @@ export default class Game {
     this.winnigScore = 50;
     this.gameTime = 0;
     this.timeLimit = 5000; // game gose for 5 seconds for testing porposes
+    this.speed = 2;
   }
 
   update(deltaTime) {
@@ -33,6 +36,8 @@ export default class Game {
     if (this.gameTime > this.timeLimit) {
       this.gameOver = true;
     }
+    this.background.update();
+    this.background.layer4.update();
     this.palyer.update();
     if (this.ammoTimer > this.ammoInterval) {
       if (this.ammo < this.maxAmmo) {
@@ -77,9 +82,11 @@ export default class Game {
   }
 
   draw(context) {
+    this.background.draw(context); // must be drawn first, si it dose not cover player
     this.palyer.draw(context);
     this.ui.draw(context);
     this.enemies.forEach((enemy) => enemy.draw(context));
+    this.background.layer4.draw(context);
   }
 
   addEnemy() {

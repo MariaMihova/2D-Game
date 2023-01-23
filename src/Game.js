@@ -25,8 +25,9 @@ export default class Game {
     this.score = 0;
     this.winnigScore = 50;
     this.gameTime = 0;
-    this.timeLimit = 5000; // game gose for 5 seconds for testing porposes
+    this.timeLimit = 200000; // game time limit
     this.speed = 2;
+    this.gdebug = true;
   }
 
   update(deltaTime) {

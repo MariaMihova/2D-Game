@@ -16,11 +16,6 @@ export default class UI {
     context.font = `${this.fontSize}px ${this.fonFamily}`;
     //score
     context.fillText(`Score: ${this.game.score}`, 20, 40);
-    //ammo
-
-    for (let i = 0; i < this.game.ammo; i++) {
-      context.fillRect(20 + 5 * i, 50, 3, 20); //ammo recharging
-    }
 
     //Game timer
     const formatedTme = (this.game.gameTime * 0.001).toFixed(1);
@@ -52,6 +47,13 @@ export default class UI {
         this.game.width * 0.5,
         this.game.height * 0.5 + 40
       );
+    }
+    //ammo
+    if (this.game.palyer.powerUp) {
+      context.fillStyle = "#ffffbd";
+    }
+    for (let i = 0; i < this.game.ammo; i++) {
+      context.fillRect(20 + 5 * i, 50, 3, 20); //ammo recharging
     }
     context.restore();
   }

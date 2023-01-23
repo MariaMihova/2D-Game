@@ -4,8 +4,6 @@ export default class Enemy {
     this.x = this.game.width;
     this.speedX = Math.random() * -1.5 - 0.5;
     this.markedForDelition = false;
-    this.lives = 10;
-    this.score = this.lives;
     this.frameX = 0;
     this.frameY = 0;
     this.maxFrame = 37;

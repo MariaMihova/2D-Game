@@ -17,9 +17,12 @@ export default class Player {
     this.maxSpeed = 3; // the speed by pixels at presed key
     this.prejectiles = [];
     this.image = document.getElementById("player");
+    this.powerUp = false;
+    this.powerUpTimer = 0;
+    this.powerUpLimit = 10000;
   }
 
-  update() {
+  update(deltaTime) {
     if (this.game.keys.includes("ArrowUp")) {
       this.speedY = -this.maxSpeed;
     } else if (this.game.keys.includes("ArrowDown")) {
@@ -32,12 +35,28 @@ export default class Player {
     this.prejectiles = this.prejectiles.filter((p) => !p.markedForDeletion);
     //sprite animation
     this.frameX < this.maxFrame ? this.frameX++ : (this.frameX = 0);
+
+    //power up
+
+    if (this.powerUp) {
+      if (this.powerUpTimer > this.powerUpLimit) {
+        this.powerUpTimer = 0;
+        this.powerUp = false;
+        this.framey = 0;
+      } else {
+        this.powerUpTimer += deltaTime;
+        this.framey = 1;
+        this.game.ammo += 0.1;
+      }
+    }
   }
 
   draw(context) {
     if (this.game.debug) {
       context.strokeRect(this.x, this.y, this.width, this.height);
     }
+
+    this.prejectiles.forEach((p) => p.draw(context));
 
     context.drawImage(
       this.image,
@@ -50,8 +69,6 @@ export default class Player {
       this.width,
       this.height
     );
-
-    this.prejectiles.forEach((p) => p.draw(context));
   }
 
   shootTop() {
@@ -59,5 +76,22 @@ export default class Player {
       this.prejectiles.push(new Projectile(this.game, this.x, this.y));
       this.game.ammo--;
     }
+    if (this.powerUp) {
+      this.shootBotom();
+    }
+  }
+
+  shootBotom() {
+    if (this.game.ammo > 0) {
+      this.prejectiles.push(
+        new Projectile(this.game, this.x + 80, this.y + 175)
+      );
+    }
+  }
+
+  enterPowerUp() {
+    this.powerUpTimer = 0;
+    this.powerUp = true;
+    this.game.ammo = this.game.maxAmmo;
   }
 }

@@ -1,14 +1,15 @@
 import Enemy from "./Enemy.js";
 
-export default class Angler2 extends Enemy {
+export default class LuckyEnemy extends Enemy {
   constructor(game) {
     super(game);
-    this.width = 213;
-    this.height = 165;
+    this.width = 99;
+    this.height = 95;
     this.y = Math.random() * (this.game.height * 0.9 - this.height);
-    this.image = document.getElementById("enemy2");
+    this.image = document.getElementById("luckyEnemy");
     this.frameY = Math.floor(Math.random() * 2);
     this.lives = 3;
-    this.score = this.lives;
+    this.score = 15;
+    this.type = "lucky";
   }
 }

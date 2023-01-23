@@ -3,6 +3,7 @@ import InputHandler from "./InputHandler.js";
 import UI from "./UI.js";
 import Angler1 from "./enemy/Enemy1.js";
 import Angler2 from "./enemy/Enemy2.js";
+import LuckyEnemy from "./enemy/LuckyEnemy.js";
 import { chechCollision } from "./colisions.js";
 import { Background } from "./Background.js";
 
@@ -23,10 +24,10 @@ export default class Game {
     this.ammoTimer = 0;
     this.ammoInterval = 500; // we use it to recharge ammo every 500 mls.
     this.gameOver = false;
-    this.score = 0;
+    this.score = 0; // TODO fix not to get negative
     this.winnigScore = 50;
     this.gameTime = 0;
-    this.timeLimit = 200000; // game time limit
+    this.timeLimit = 20000; // game time limit 20 sec
     this.speed = 2;
     this.gdebug = true;
   }
@@ -40,7 +41,7 @@ export default class Game {
     }
     this.background.update();
     this.background.layer4.update();
-    this.palyer.update();
+    this.palyer.update(deltaTime);
     if (this.ammoTimer > this.ammoInterval) {
       if (this.ammo < this.maxAmmo) {
         this.ammo++;
@@ -54,6 +55,11 @@ export default class Game {
       enemy.update();
       if (chechCollision(this.palyer, enemy)) {
         enemy.markedForDelition = true;
+        if (enemy.type === "lucky") {
+          this.palyer.enterPowerUp();
+        } else {
+          this.score--;
+        }
       }
       for (let proj of this.palyer.prejectiles) {
         if (chechCollision(proj, enemy)) {
@@ -94,10 +100,12 @@ export default class Game {
   addEnemy() {
     const randomize = Math.random();
 
-    if (randomize < 0.5) {
+    if (randomize < 0.3) {
       this.enemies.push(new Angler1(this));
-    } else {
+    } else if (randomize < 0.6) {
       this.enemies.push(new Angler2(this));
+    } else {
+      this.enemies.push(new LuckyEnemy(this));
     }
   }
 }

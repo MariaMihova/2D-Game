@@ -19,6 +19,9 @@
 #bg2,
 #bg3,
 #bg4,
-#player {
+#player,
+#enemy1,
+#enemy2,
+#luckyEnemy {
   display: none;
 }

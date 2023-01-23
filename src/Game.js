@@ -1,7 +1,8 @@
 import Player from "./Player.js";
 import InputHandler from "./InputHandler.js";
 import UI from "./UI.js";
-import Angler1 from "./Enemy.js";
+import Angler1 from "./enemy/Enemy1.js";
+import Angler2 from "./enemy/Enemy2.js";
 import { chechCollision } from "./colisions.js";
 import { Background } from "./Background.js";
 
@@ -91,6 +92,12 @@ export default class Game {
   }
 
   addEnemy() {
-    this.enemies.push(new Angler1(this));
+    const randomize = Math.random();
+
+    if (randomize < 0.5) {
+      this.enemies.push(new Angler1(this));
+    } else {
+      this.enemies.push(new Angler2(this));
+    }
   }
 }

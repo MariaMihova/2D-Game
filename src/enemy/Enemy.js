@@ -1,4 +1,4 @@
-class Enemy {
+export default class Enemy {
   constructor(game) {
     this.game = game;
     this.x = this.game.width;
@@ -14,7 +14,6 @@ class Enemy {
   update() {
     this.x += this.speedX - this.game.speed;
     if (this.x + this.width < 0) {
-      // no width property
       this.markedForDelition = true;
     }
     this.frameX < this.maxFrame ? this.frameX++ : (this.frameX = 0);
@@ -39,16 +38,5 @@ class Enemy {
     );
     context.font = "20px Helvetica";
     context.fillText(this.lives, this.x, this.y);
-  }
-}
-
-export default class Angler1 extends Enemy {
-  constructor(game) {
-    super(game);
-    this.width = 228;
-    this.height = 169;
-    this.y = Math.random() * (this.game.height * 0.9 - this.height);
-    this.image = document.getElementById("enemy1");
-    this.frameY = Math.floor(Math.random() * 3);
   }
 }

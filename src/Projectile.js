@@ -7,6 +7,7 @@ export default class Projectile {
     this.height = 3;
     this.speed = 4; // shooting speed
     this.markedForDeletion = false;
+    this.image = document.getElementById("projectile");
   }
 
   update() {
@@ -17,7 +18,6 @@ export default class Projectile {
   }
 
   draw(context) {
-    context.fillStyle = "yellow";
-    context.fillRect(this.x, this.y, this.width, this.height);
+    context.drawImage(this.image, this.x, this.y);
   }
 }

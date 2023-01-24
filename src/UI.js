@@ -2,7 +2,7 @@ export default class UI {
   constructor(game) {
     this.game = game;
     this.fontSize = 25;
-    this.fonFamily = "Helvetica";
+    this.fonFamily = "Bangers";
     this.color = "white";
   }
 
@@ -29,19 +29,19 @@ export default class UI {
       context.textAlign = "center";
       let message1, message2;
       if (this.game.score >= this.game.winnigScore) {
-        message1 = "You win!";
-        message2 = "Well done!";
+        message1 = "Yippee Ki-Yay...";
+        message2 = "";
       } else {
-        message1 = "You lose!";
-        message2 = "Tyr again next time";
+        message1 = "When heroes die, I run!";
+        message2 = "Run... run!";
       }
-      context.font = `50px ${this.fonFamily}`;
+      context.font = `100px ${this.fonFamily}`;
       context.fillText(
         message1,
         this.game.width * 0.5,
         this.game.height * 0.5 - 40
       );
-      context.font = `25px ${this.fonFamily}`;
+      context.font = `75px ${this.fonFamily}`;
       context.fillText(
         message2,
         this.game.width * 0.5,

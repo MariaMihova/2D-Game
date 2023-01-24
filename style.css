@@ -24,6 +24,7 @@
 #enemy1,
 #enemy2,
 #luckyEnemy,
-#projectile {
+#projectile,
+#gears {
   display: none;
 }

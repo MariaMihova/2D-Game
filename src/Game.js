@@ -6,6 +6,7 @@ import Angler2 from "./enemy/Enemy2.js";
 import LuckyEnemy from "./enemy/LuckyEnemy.js";
 import { chechCollision } from "./colisions.js";
 import { Background } from "./Background.js";
+import Particle from "./Particle.js";
 
 export default class Game {
   constructor(width, height) {
@@ -17,6 +18,7 @@ export default class Game {
     this.ui = new UI(this);
     this.keys = [];
     this.enemies = [];
+    this.gears = [];
     this.enemyTimer = 0;
     this.enemyInterval = 1000; // interval for adding new enemy
     this.ammo = 20; // start ammo
@@ -51,10 +53,24 @@ export default class Game {
       this.ammoTimer += deltaTime;
     }
 
+    this.gears.forEach((gear) => gear.update());
+    this.gears = this.gears.filter((g) => !g.markedForDelition);
+
     for (let enemy of this.enemies) {
       enemy.update();
       if (chechCollision(this.palyer, enemy)) {
         enemy.markedForDelition = true;
+
+        for (let i = 0; i < 10; i++) {
+          this.gears.push(
+            new Particle(
+              this,
+              enemy.x + enemy.width * 0.5,
+              enemy.y + enemy.height * 0.5
+            )
+          );
+        }
+
         if (enemy.type === "lucky") {
           this.palyer.enterPowerUp();
         } else {
@@ -65,7 +81,23 @@ export default class Game {
         if (chechCollision(proj, enemy)) {
           enemy.lives--;
           proj.markedForDelition = true;
+          this.gears.push(
+            new Particle(
+              this,
+              enemy.x + enemy.width * 0.5,
+              enemy.y + enemy.height * 0.5
+            )
+          );
           if (enemy.lives <= 0) {
+            for (let i = 0; i < 10; i++) {
+              this.gears.push(
+                new Particle(
+                  this,
+                  enemy.x + enemy.width * 0.5,
+                  enemy.y + enemy.height * 0.5
+                )
+              );
+            }
             enemy.markedForDelition = true;
             if (!this.gameOver) {
               this.score += enemy.score;
@@ -93,6 +125,7 @@ export default class Game {
     this.background.draw(context); // must be drawn first, si it dose not cover player
     this.palyer.draw(context);
     this.ui.draw(context);
+    this.gears.forEach((gear) => gear.draw(context));
     this.enemies.forEach((enemy) => enemy.draw(context));
     this.background.layer4.draw(context);
   }

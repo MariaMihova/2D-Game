@@ -36,6 +36,13 @@ export default class Player {
     //sprite animation
     this.frameX < this.maxFrame ? this.frameX++ : (this.frameX = 0);
 
+    //vertical boundaries
+    if (this.y > this.game.height - this.height * 0.5) {
+      this.y = this.game.height - this.height * 0.5;
+    } else if (this.y < -this.height * 0.5) {
+      this.y = -this.height * 0.5;
+    }
+
     //power up
 
     if (this.powerUp) {

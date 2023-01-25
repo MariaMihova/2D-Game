@@ -4,9 +4,11 @@ import UI from "./UI.js";
 import Angler1 from "./enemy/Enemy1.js";
 import Angler2 from "./enemy/Enemy2.js";
 import LuckyEnemy from "./enemy/LuckyEnemy.js";
+import HaveWhale from "./enemy/HaveWhale.js";
 import { chechCollision } from "./colisions.js";
 import { Background } from "./Background.js";
 import Particle from "./Particle.js";
+import Drone from "./enemy/Drone.js";
 
 export default class Game {
   constructor(width, height) {
@@ -26,12 +28,12 @@ export default class Game {
     this.ammoTimer = 0;
     this.ammoInterval = 500; // we use it to recharge ammo every 500 mls.
     this.gameOver = false;
-    this.score = 0; // TODO fix not to get negative
+    this.score = 0;
     this.winnigScore = 50;
     this.gameTime = 0;
     this.timeLimit = 20000; // game time limit 20 sec
     this.speed = 2;
-    this.gdebug = true;
+    this.gdebug = false;
   }
 
   update(deltaTime) {
@@ -61,7 +63,8 @@ export default class Game {
       if (chechCollision(this.palyer, enemy)) {
         enemy.markedForDelition = true;
 
-        for (let i = 0; i < 10; i++) {
+        // loop code repeating, make function
+        for (let i = 0; i < enemy.score; i++) {
           this.gears.push(
             new Particle(
               this,
@@ -75,6 +78,9 @@ export default class Game {
           this.palyer.enterPowerUp();
         } else {
           this.score--;
+          if (this.score < 0) {
+            this.score = 0;
+          }
         }
       }
       for (let proj of this.palyer.prejectiles) {
@@ -88,8 +94,10 @@ export default class Game {
               enemy.y + enemy.height * 0.5
             )
           );
+
           if (enemy.lives <= 0) {
-            for (let i = 0; i < 10; i++) {
+            // loop code repeating, make function from line 65
+            for (let i = 0; i < enemy.score; i++) {
               this.gears.push(
                 new Particle(
                   this,
@@ -98,7 +106,21 @@ export default class Game {
                 )
               );
             }
+
             enemy.markedForDelition = true;
+
+            if (enemy.type === "hive") {
+              for (let i = 0; i < 5; i++) {
+                this.enemies.push(
+                  new Drone(
+                    this,
+                    enemy.x + Math.random() * enemy.width,
+                    enemy.y + Math.random() * enemy.height * 0.5
+                  )
+                );
+              }
+            }
+
             if (!this.gameOver) {
               this.score += enemy.score;
             }
@@ -123,8 +145,8 @@ export default class Game {
 
   draw(context) {
     this.background.draw(context); // must be drawn first, si it dose not cover player
-    this.palyer.draw(context);
     this.ui.draw(context);
+    this.palyer.draw(context);
     this.gears.forEach((gear) => gear.draw(context));
     this.enemies.forEach((enemy) => enemy.draw(context));
     this.background.layer4.draw(context);
@@ -137,6 +159,8 @@ export default class Game {
       this.enemies.push(new Angler1(this));
     } else if (randomize < 0.6) {
       this.enemies.push(new Angler2(this));
+    } else if (randomize < 0.8) {
+      this.enemies.push(new HaveWhale(this));
     } else {
       this.enemies.push(new LuckyEnemy(this));
     }

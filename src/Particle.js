@@ -16,13 +16,13 @@ export default class Particle {
     this.angle = 0;
     this.va = Math.random() * 0.2 - 0.1; //velocity of angle
     this.bounsed = 0;
-    this.bottomBounsedBoundray = Math.random() * 100 + 60;
+    this.bottomBounsedBoundray = Math.random() * 80 + 60;
   }
 
   update() {
     this.angle += this.va;
     this.speedY += this.gravity;
-    this.x -= this.speedX;
+    this.x -= this.speedX + this.game.speed;
     this.y += this.speedY;
     if (this.y > this.game.height + this.size || this.x < 0 - this.size) {
       this.markedForDeletion = true;
@@ -41,7 +41,6 @@ export default class Particle {
     //rotation
     context.translate(this.x, this.y);
     context.rotate(this.angle);
-    // console.log(this);
     context.drawImage(
       this.image,
       this.frameX * this.spriteSize,

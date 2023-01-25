@@ -8,7 +8,7 @@ export default class LuckyEnemy extends Enemy {
     this.y = Math.random() * (this.game.height * 0.95 - this.height); //may go to parent cclass, same at all children
     this.image = document.getElementById("luckyEnemy");
     this.frameY = Math.floor(Math.random() * 2);
-    this.lives = 3;
+    this.lives = 5;
     this.score = 15;
     this.type = "lucky";
   }

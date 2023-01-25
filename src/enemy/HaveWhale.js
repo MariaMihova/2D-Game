@@ -8,7 +8,7 @@ export default class HaveWhale extends Enemy {
     this.y = Math.random() * (this.game.height * 0.95 - this.height);
     this.image = document.getElementById("haveWhale");
     this.frameY = 0;
-    this.lives = 15;
+    this.lives = 20;
     this.score = this.lives;
     this.type = "hive";
     this.speedX = Math.random() * -1.2 - 0.2;

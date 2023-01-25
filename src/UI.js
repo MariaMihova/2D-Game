@@ -18,9 +18,9 @@ export default class UI {
     context.fillText(`Score: ${this.game.score}`, 20, 40);
 
     //Game timer
-    const formatedTme = (this.game.gameTime * 0.001).toFixed(1);
+    const formatedTime = (this.game.gameTime * 0.001).toFixed(1);
     context.fillText(
-      `Timer ${formatedTme}`,
+      `Timer ${formatedTime}`,
       this.game.width * 0.9,
       this.game.height * 0.15 - 40
     );

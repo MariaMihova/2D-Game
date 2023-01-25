@@ -4,7 +4,7 @@ window.addEventListener("load", onLoad);
 function onLoad(event) {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
-  canvas.width = 1700;
+  canvas.width = 2000;
   canvas.height = 500;
 
   const game = new Game(canvas.width, canvas.height);

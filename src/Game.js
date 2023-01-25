@@ -22,16 +22,16 @@ export default class Game {
     this.enemies = [];
     this.gears = [];
     this.enemyTimer = 0;
-    this.enemyInterval = 1000; // interval for adding new enemy
+    this.enemyInterval = 2000; // interval for adding new enemy
     this.ammo = 20; // start ammo
     this.maxAmmo = 50; // well, max ammo
     this.ammoTimer = 0;
-    this.ammoInterval = 500; // we use it to recharge ammo every 500 mls.
+    this.ammoInterval = 350; // we use it to recharge ammo every 500 mls.
     this.gameOver = false;
     this.score = 0;
-    this.winnigScore = 50;
+    this.winnigScore = 100;
     this.gameTime = 0;
-    this.timeLimit = 20000; // game time limit 20 sec
+    this.timeLimit = 40000; // game time limit 40 sec
     this.speed = 2;
     this.gdebug = false;
   }
@@ -77,7 +77,9 @@ export default class Game {
         if (enemy.type === "lucky") {
           this.palyer.enterPowerUp();
         } else {
-          this.score--;
+          if (!this.gameOver) {
+            this.score--;
+          }
           if (this.score < 0) {
             this.score = 0;
           }
@@ -123,10 +125,14 @@ export default class Game {
 
             if (!this.gameOver) {
               this.score += enemy.score;
+              //scor is set not to more then winning score
+              // if (this.score > this.winnigScore) {
+              //   this.score = this.winnigScore;
+              // }
             }
-            if (this.score > this.winnigScore) {
-              this.gameOver = true;
-            }
+            // if (this.score === this.winnigScore) {
+            //   this.gameOver = true;
+            // }
           }
         }
       }
@@ -159,7 +165,7 @@ export default class Game {
       this.enemies.push(new Angler1(this));
     } else if (randomize < 0.6) {
       this.enemies.push(new Angler2(this));
-    } else if (randomize < 0.8) {
+    } else if (randomize < 0.7) {
       this.enemies.push(new HaveWhale(this));
     } else {
       this.enemies.push(new LuckyEnemy(this));
